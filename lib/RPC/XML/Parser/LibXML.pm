@@ -19,8 +19,6 @@ our $TYPE_MAP = +{
     string             => 'RPC::XML::string',
     double             => 'RPC::XML::double',
     'dateTime.iso8601' => 'RPC::XML::datetime_iso8601',
-    base64             => 'RPC::XML::base64',
-    array              => 'RPC::XML::array',
 };
 
 sub parse_rpc_xml {
