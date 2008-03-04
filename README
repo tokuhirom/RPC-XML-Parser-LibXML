@@ -1,0 +1,27 @@
+This is Perl module RPC::XML::Parser::LibXML.
+
+INSTALLATION
+
+RPC::XML::Parser::LibXML installation is straightforward. If your CPAN shell is set up,
+you should just be able to do
+
+    % cpan RPC::XML::Parser::LibXML
+
+Download it, unpack it, then build it as per the usual:
+
+    % perl Makefile.PL
+    % make && make test
+
+Then install it:
+
+    % make install
+
+DOCUMENTATION
+
+RPC::XML::Parser::LibXML documentation is available as in POD. So you can do:
+
+    % perldoc RPC::XML::Parser::LibXML
+
+to read the documentation online with your favorite pager.
+
+Tokuhiro Matsuno
