@@ -6,7 +6,6 @@ our $VERSION = '0.01';
 use base qw/Exporter/;
 use RPC::XML;
 use XML::LibXML;
-use Encode;
 use MIME::Base64;
 use Carp;
 
@@ -40,7 +39,7 @@ sub parse_rpc_xml {
         return RPC::XML::response->new(
             RPC::XML::fault->new(
                 $doc->findvalue('/methodResponse/fault/value/struct/member/value/int'),
-                encode('utf8', $doc->findvalue('/methodResponse/fault/value/struct/member/value/string')),
+                $doc->findvalue('/methodResponse/fault/value/struct/member/value/string'),
             ),
         );
     } else {
@@ -64,14 +63,14 @@ sub _extract {
             my $result = {};
             for my $member (@members) {
                 my ($trash, $name, $trash2, $value) = $member->childNodes;
-                ($result->{encode 'utf8', $name->textContent}, ) = _extract($value->firstChild);
+                ($result->{$name->textContent}, ) = _extract($value->firstChild);
             }
             push @args, RPC::XML::struct->new($result);
         } elsif ($nodename eq 'array') {
             push @args, RPC::XML::array->new(_extract($node->findnodes($node->nodePath . '/data/value/*')));
         } else {
             my $class = $TYPE_MAP->{ $node->nodeName };
-            push @args, $class->new(encode 'utf8', $val);
+            push @args, $class->new($val);
         }
     }
 

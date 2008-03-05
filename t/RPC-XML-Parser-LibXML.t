@@ -9,20 +9,28 @@ use Test::More tests => 19;
 BEGIN { use_ok('RPC::XML::Parser::LibXML') };
 
 use RPC::XML;
+use utf8;
 
 #########################
+
+# bloody hack to shut up Test::Builder being passed Unicode strings
+sub _is_deeply {
+    my($this, $that, $msg) = @_;
+    utf8::encode($msg) if $msg;
+    is_deeply($this, $that, $msg);
+}
 
 # Insert your test code below, the Test::More module is use()ed here so read
 # its man page ( perldoc Test::More ) for help writing this test script.
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
     </methodCall>
   }), RPC::XML::request->new('foo.bar'),
   'methodCall w/ no params';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params />
@@ -30,7 +38,7 @@ is_deeply parse_rpc_xml(qq{
   }), RPC::XML::request->new('foo.bar'),
   'methodCall w/ empty <params />';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params></params>
@@ -38,7 +46,7 @@ is_deeply parse_rpc_xml(qq{
   }), RPC::XML::request->new('foo.bar'),
   'methodCall w/ empty <params></params>';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -53,7 +61,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ [3::int, 6::int]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -70,7 +78,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ [1::boolean, ...]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -89,7 +97,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ ["る"::string, ...]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -103,7 +111,7 @@ is_deeply parse_rpc_xml(qq{
   'methodCall w/ [-3.1415926536::double]';
 
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -116,7 +124,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ [20070501T120656+0900::dateTime.iso8601]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -129,7 +137,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ ["Nyarlathotep"::base64]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -142,7 +150,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ <struct />';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -155,7 +163,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ <struct></struct>';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -179,7 +187,7 @@ is_deeply parse_rpc_xml(qq{
       })),
   'methodCall w/ [struct]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -210,7 +218,7 @@ is_deeply parse_rpc_xml(qq{
       })),
   'methodCall w/ [struct]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -226,7 +234,7 @@ is_deeply parse_rpc_xml(qq{
   'methodCall w/ <array><data /></array>';
 
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -239,7 +247,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodCall w/ <array><data></data></array>';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
@@ -260,7 +268,7 @@ is_deeply parse_rpc_xml(qq{
   'methodCall w/ ["る"::string, ...]';
 
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodResponse>
       <params>
         <param>
@@ -273,7 +281,7 @@ is_deeply parse_rpc_xml(qq{
      ),
   'methodResponse w/ ["る"::string]';
 
-is_deeply parse_rpc_xml(qq{
+_is_deeply parse_rpc_xml(qq{
     <methodResponse>
       <fault>
         <value>
