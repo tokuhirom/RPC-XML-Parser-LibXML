@@ -17,7 +17,8 @@ use utf8;
 sub _is_deeply {
     my($this, $that, $msg) = @_;
     utf8::encode($msg) if $msg;
-    is_deeply($this, $that, $msg);
+    @_ = ($this, $that, $msg);
+    goto &is_deeply;
 }
 
 # Insert your test code below, the Test::More module is use()ed here so read
