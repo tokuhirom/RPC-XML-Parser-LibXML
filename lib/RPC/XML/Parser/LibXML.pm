@@ -62,7 +62,7 @@ sub _extract {
             my @members = $node->findnodes($node->nodePath . '/member'); # XXX
             my $result = {};
             for my $member (@members) {
-                my ($trash, $name, $trash2, $value) = $member->childNodes;
+                my ($name, $value) = grep !$_->isa('XML::LibXML::Text'), $member->childNodes;
                 ($result->{$name->textContent}, ) = _extract($value->firstChild);
             }
             push @args, RPC::XML::struct->new($result);

@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 BEGIN { use_ok('RPC::XML::Parser::LibXML') };
 
 use RPC::XML;
@@ -304,3 +304,21 @@ _is_deeply parse_rpc_xml(qq{
      ),
   'methodResponse w/ [(3, "る")::fault]';
 
+_is_deeply parse_rpc_xml(qq{
+    <methodCall>
+      <methodName>foo.bar</methodName>
+      <params>
+        <param><value><struct>
+                        <member><name>foo</name><value><string>bar</string></value></member>
+                        <member><name>bar</name>
+                          <value><string>baz</string></value></member>
+                      </struct></value></param>
+      </params>
+    </methodCall>
+  }), RPC::XML::request->new(
+      'foo.bar',
+      RPC::XML::struct->new({
+          'foo' => RPC::XML::string->new('bar'),
+          'bar' => RPC::XML::string->new('baz'),
+      })),
+  'methodCall w/ [struct], no newlines';
