@@ -59,17 +59,18 @@ sub _extract {
         if ($nodename eq 'base64')  {
             push @args, RPC::XML::base64->new(decode_base64($val));
         } elsif ($nodename eq 'struct') {
-            my @members = $node->findnodes($node->nodePath . '/member'); # XXX
+            my @members = $node->findnodes('./member'); # XXX
             my $result = {};
             for my $member (@members) {
-                my ($name, $value) = grep !$_->isa('XML::LibXML::Text'), $member->childNodes;
-                ($result->{$name->textContent}, ) = _extract($value->firstChild);
+                my($name)  = $member->findnodes('./name');
+                my($value) = $member->findnodes('./value/*');
+                ($result->{$name->textContent}, ) = _extract($value);
             }
             push @args, RPC::XML::struct->new($result);
         } elsif ($nodename eq 'array') {
             push @args, RPC::XML::array->new(_extract($node->findnodes($node->nodePath . '/data/value/*')));
         } else {
-            my $class = $TYPE_MAP->{ $node->nodeName };
+            my $class = $TYPE_MAP->{ $nodename } or next;
             push @args, $class->new($val);
         }
     }

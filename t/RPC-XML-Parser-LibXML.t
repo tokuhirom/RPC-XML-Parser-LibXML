@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 BEGIN { use_ok('RPC::XML::Parser::LibXML') };
 
 use RPC::XML;
@@ -322,3 +322,58 @@ _is_deeply parse_rpc_xml(qq{
           'bar' => RPC::XML::string->new('baz'),
       })),
   'methodCall w/ [struct], no newlines';
+
+_is_deeply parse_rpc_xml(qq{<?xml version="1.0" encoding="utf-8"?>
+<methodCall>
+ <methodName>metaWeblog.newPost</methodName>
+ <params>
+  <param>
+   <value>
+    <string>3</string>
+   </value>
+  </param>
+  <param>
+   <value>
+    <string>foo</string>
+   </value>
+  </param>
+  <param>
+   <value>
+    <struct>
+     <member>
+      <name>title</name>
+      <value>
+       <string>testing excerpt</string>
+      </value>
+     </member>
+     <member>
+      <name>description</name>
+      <value>
+       <string>&lt;p&gt;testing xxx&lt;/p&gt;</string>
+      </value>
+     </member>
+     <member>
+      <name>dateCreated</name>
+      <value>
+       <dateTime.iso8601>20080403T22:11:33</dateTime.iso8601>
+      </value>
+     </member>
+    </struct>
+   </value>
+  </param>
+ </params>
+</methodCall>
+}), RPC::XML::request->new(
+    'metaWeblog.newPost',
+    RPC::XML::string->new('3'),
+    RPC::XML::string->new('foo'),
+    RPC::XML::struct->new({
+        title => RPC::XML::string->new('testing excerpt'),
+        description => RPC::XML::string->new('<p>testing xxx</p>'),
+        dateCreated => RPC::XML::datetime_iso8601->new('20080403T22:11:33'),
+    }),
+  ),
+  'Windows Live Write style newlines';
+
+
+
