@@ -2,7 +2,7 @@ package RPC::XML::Parser::LibXML;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 use base qw/Exporter/;
 use RPC::XML;
 use XML::LibXML;
@@ -85,21 +85,35 @@ __END__
 
 =head1 NAME
 
-RPC::XML::Parser::LibXML -
+RPC::XML::Parser::LibXML - Fast XML-RPC parser with libxml
 
 =head1 SYNOPSIS
 
     use RPC::XML::Parser::LibXML;
 
+    my $req = parse_rpc_xml(qq{
+      <methodCall>
+        <methodName>foo.bar</methodName>
+        <params>
+          <param><value><string>Hello, world!</string></value></param>
+        </params>
+      </methodCall>
+    });
+    # $req is a RPC::XML::request
+
 =head1 DESCRIPTION
 
-RPC::XML::Parser::LibXML is
+RPC::XML::Parser::LibXML is fast XML-RPC parser written with XML::LibXML.
 
 =head1 AUTHOR
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF GMAIL COME<gt>
 
+Tatsuhiko Miyagawa
+
 =head1 SEE ALSO
+
+L<RPC::XML::Parser>, L<RPC::XML::Parser::XS>, L<XML::LibXML>
 
 =head1 LICENSE
 
