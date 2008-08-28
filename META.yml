@@ -1,0 +1,28 @@
+---
+abstract: 'Fast XML-RPC parser with libxml'
+author:
+  - 'Tokuhiro Matsuno <tokuhirom AAJKLFJEF GMAIL COM>'
+build_requires:
+  Test::More: 0
+  YAML: 0
+distribution_type: module
+generated_by: 'Module::Install version 0.77'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: RPC-XML-Parser-LibXML
+no_index:
+  directory:
+    - inc
+    - t
+requires:
+  Carp: 0
+  Encode: 0
+  MIME::Base64: 0
+  RPC::XML: 0
+  XML::LibXML: 0
+  perl: 5.8.0
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.03

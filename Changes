@@ -1,5 +1,10 @@
 Revision history for Perl extension RPC::XML::Parser::LibXML
 
+0.03  Wed Aug 27 20:59:32 PDT 2008
+        - Fixed bug when findnodes() returns list including undeg.
+          (Tatsuhiko Miyagawa)
+        - miyagawa is taking over the maint bit to push to CPAN
+
 0.02
         - initial cpan release.
 

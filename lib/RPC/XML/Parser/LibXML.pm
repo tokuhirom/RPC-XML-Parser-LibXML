@@ -2,7 +2,7 @@ package RPC::XML::Parser::LibXML;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 use base qw/Exporter/;
 use RPC::XML;
 use XML::LibXML;
@@ -109,7 +109,7 @@ RPC::XML::Parser::LibXML is fast XML-RPC parser written with XML::LibXML.
 
 Tokuhiro Matsuno E<lt>tokuhirom AAJKLFJEF GMAIL COME<gt>
 
-Tatsuhiko Miyagawa
+Tatsuhiko Miyagawa E<lt>miyagawa@cpan.orgE<gt>
 
 =head1 SEE ALSO
 
