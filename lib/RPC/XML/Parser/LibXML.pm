@@ -52,7 +52,7 @@ sub _extract {
 
     my @args;
 
-    for my $node (@nodes) {
+    for my $node (grep defined, @nodes) {
         my $nodename = $node->nodeName;
         my $val = $node->textContent;
 

@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 21;
+use Test::More tests => 24;
 BEGIN { use_ok('RPC::XML::Parser::LibXML') };
 
 use RPC::XML;
@@ -375,5 +375,20 @@ _is_deeply parse_rpc_xml(qq{<?xml version="1.0" encoding="utf-8"?>
   ),
   'Windows Live Write style newlines';
 
+my $r = eval { RPC::XML::Parser::LibXML::parse_rpc_xml(<<XML);
+<?xml version="1.0" encoding="UTF-8"?>
+<methodCall>
+<methodName>metaWeblog.newPost</methodName><params>
+<param><value><string>testf</string></value></param>
+<param><value><string>USERNAME</string></value></param><param><value><string>PASSWORD</string></value></param>
+<param><value><struct><member><name>title</name><value>tyuyur</value></member><member><name>description</name><value>&lt;a href=&quot;http://example.com/.a/6a00d83453919f69e200ddx53f5f4178833-pi&quot;&gt;&lt;img src = &quot;http://tsdavis.typepad.com/.a/6a00d83453919f69e200e553f5f4178833-pi&quot; align = &quot;left&quot; height=&quot;384&quot; width=&quot;212&quot; hspace = &quot;20&quot; /&gt;&lt;/a&gt;</value></member></struct></value></param>
+<param><value><boolean>1</boolean></value></param></params>
+</methodCall>
+XML
+};
+
+ok !$@;
+is $r->{name}, 'metaWeblog.newPost';
+is @{ $r->{args} }, 5;
 
 
