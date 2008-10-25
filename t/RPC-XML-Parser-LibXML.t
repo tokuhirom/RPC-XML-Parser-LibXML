@@ -375,7 +375,8 @@ _is_deeply parse_rpc_xml(qq{<?xml version="1.0" encoding="utf-8"?>
   ),
   'Windows Live Write style newlines';
 
-my $r = eval { RPC::XML::Parser::LibXML::parse_rpc_xml(<<XML);
+{
+    my $r = eval { RPC::XML::Parser::LibXML::parse_rpc_xml(<<XML);
 <?xml version="1.0" encoding="UTF-8"?>
 <methodCall>
 <methodName>metaWeblog.newPost</methodName><params>
@@ -385,10 +386,41 @@ my $r = eval { RPC::XML::Parser::LibXML::parse_rpc_xml(<<XML);
 <param><value><boolean>1</boolean></value></param></params>
 </methodCall>
 XML
-};
+    };
 
-ok !$@;
-is $r->{name}, 'metaWeblog.newPost';
-is @{ $r->{args} }, 5;
+    ok !$@;
+    is $r->{name}, 'metaWeblog.newPost';
+    is @{ $r->{args} }, 5;
+}
 
+{
+    my $r = eval { RPC::XML::Parser::LibXML::parse_rpc_xml(<<XML);
+<?xml version="1.0" encoding="UTF-8"?>
+<methodCall>
+ <methodName>metaWeblog.newPost</methodName>
+ <params>
+  <param>
+   <value>foobar</value>
+  </param>
+  <param>
+   <value><string>**ACCOUNTNAME**</string></value>
+  </param>
+  <param>
+   <value><string>**PASSWORD**</string></value>
+  </param>
+  <param>
+   <value>
+    <struct>
+     <member><name>title</name><value>test</value></member>
+    </struct>
+   </value>
+  </param>
+  <param><value><boolean>1</boolean></value></param>
+ </params>
+</methodCall>
+XML
+    };
 
+    is $r->{args}->[0]->value, 'foobar';
+    is $r->{args}->[3]->{title}->value, 'test';
+}
