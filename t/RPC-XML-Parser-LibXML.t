@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 24;
+use Test::More tests => 28;
 BEGIN { use_ok('RPC::XML::Parser::LibXML') };
 
 use RPC::XML;
@@ -412,10 +412,20 @@ XML
    <value>
     <struct>
      <member><name>title</name><value>test</value></member>
+     <member><name>description</name><value><string>desc</string></value></member>
     </struct>
    </value>
   </param>
-  <param><value><boolean>1</boolean></value></param>
+  <param>
+   <value>
+    <array>
+     <data>
+      <value>foo</value>
+      <value><string>bar</string></value>
+     </data>
+    </array>
+   </value>
+  </param>
  </params>
 </methodCall>
 XML
@@ -423,4 +433,6 @@ XML
 
     is $r->{args}->[0]->value, 'foobar';
     is $r->{args}->[3]->{title}->value, 'test';
+    is $r->{args}->[3]->{description}->value, 'desc';
+    is_deeply $r->{args}->[4], [ map RPC::XML::string->new($_), qw( foo bar ) ];
 }

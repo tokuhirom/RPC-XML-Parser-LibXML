@@ -20,6 +20,8 @@ our $TYPE_MAP = +{
     'dateTime.iso8601' => 'RPC::XML::datetime_iso8601',
 };
 
+my $value_xpath = join "|", map "./$_", qw( int i4 boolean string double dateTime.iso8601 base64 struct array );
+
 sub parse_rpc_xml {
     my $xml = shift;
 
@@ -29,11 +31,11 @@ sub parse_rpc_xml {
     if ($doc->findnodes('/methodCall')) {
         return RPC::XML::request->new(
             $doc->findvalue('/methodCall/methodName'),
-            _extract($doc->findnodes('//params/param/value/*'))
+            _extract_values($doc->findnodes('//params/param/value'))
         );
     } elsif ($doc->findnodes('/methodResponse/params')) {
         return RPC::XML::response->new(
-            _extract($doc->findnodes('//params/param/value/*'))
+            _extract_values($doc->findnodes('//params/param/value'))
         );
     } elsif ($doc->findnodes('/methodResponse/fault')) {
         return RPC::XML::response->new(
@@ -47,35 +49,51 @@ sub parse_rpc_xml {
     }
 }
 
-sub _extract {
-    my @nodes = @_;
 
-    my @args;
+sub _extract_values {
+    my @value_nodes = @_;
 
-    for my $node (grep defined, @nodes) {
-        my $nodename = $node->nodeName;
-        my $val = $node->textContent;
-
-        if ($nodename eq 'base64')  {
-            push @args, RPC::XML::base64->new(decode_base64($val));
-        } elsif ($nodename eq 'struct') {
-            my @members = $node->findnodes('./member'); # XXX
-            my $result = {};
-            for my $member (@members) {
-                my($name)  = $member->findnodes('./name');
-                my($value) = $member->findnodes('./value/*');
-                ($result->{$name->textContent}, ) = _extract($value);
-            }
-            push @args, RPC::XML::struct->new($result);
-        } elsif ($nodename eq 'array') {
-            push @args, RPC::XML::array->new(_extract($node->findnodes($node->nodePath . '/data/value/*')));
+    my @values;
+    for my $node (grep defined, @value_nodes) {
+        my($v_node) = $node->findnodes($value_xpath);
+        my $value;
+        if (defined $v_node) {
+            $value = _extract($v_node);
         } else {
-            my $class = $TYPE_MAP->{ $nodename } or next;
-            push @args, $class->new($val);
+            # <value>foo</value> is treated as <string> by default
+            $value = RPC::XML::string->new($node->textContent);
         }
+
+        push @values, $value;
     }
 
-    return @args;
+    return @values;
+}
+
+sub _extract {
+    my $node = shift;
+
+    return unless defined $node;
+
+    my $nodename = $node->nodeName;
+    my $val = $node->textContent;
+    if ($nodename eq 'base64')  {
+        return RPC::XML::base64->new(decode_base64($val));
+    } elsif ($nodename eq 'struct') {
+        my @members = $node->findnodes('./member'); # XXX
+        my $result = {};
+        for my $member (@members) {
+            my($name)  = $member->findnodes('./name');
+            my($value) = _extract_values ($member->findnodes('./value') );
+            ($result->{$name->textContent}, ) = $value;
+        }
+        return RPC::XML::struct->new($result);
+    } elsif ($nodename eq 'array') {
+        return RPC::XML::array->new(_extract_values($node->findnodes($node->nodePath . '/data/value')));
+    } else {
+        my $class = $TYPE_MAP->{ $nodename } or return;
+        return $class->new($val);
+    }
 }
 
 1;
