@@ -1,5 +1,9 @@
 Revision history for Perl extension RPC::XML::Parser::LibXML
 
+0.04  Fri Oct 24 17:59:12 PDT 2008
+        - Fixed a bug where <value>foo</value> is not treated as <string> as in XMLRPC spec.
+          (Benjamin Trott, Tatsuhiko Miyagawa)
+
 0.03  Wed Aug 27 20:59:32 PDT 2008
         - Fixed bug when findnodes() returns list including undeg.
           (Tatsuhiko Miyagawa)

@@ -2,7 +2,7 @@ package RPC::XML::Parser::LibXML;
 use strict;
 use warnings;
 use 5.00800;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 use base qw/Exporter/;
 use RPC::XML;
 use XML::LibXML;
