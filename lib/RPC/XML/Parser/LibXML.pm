@@ -6,8 +6,8 @@ our $VERSION = '0.04';
 use base qw/Exporter/;
 use RPC::XML;
 use XML::LibXML;
-use MIME::Base64;
-use Carp;
+use MIME::Base64 ();
+use Carp ();
 
 our @EXPORT = qw/parse_rpc_xml/;
 
@@ -45,7 +45,7 @@ sub parse_rpc_xml {
             ),
         );
     } else {
-        croak "invalid xml: $xml";
+        Carp::croak("invalid xml: $xml");
     }
 }
 
@@ -78,7 +78,7 @@ sub _extract {
     my $nodename = $node->nodeName;
     my $val = $node->textContent;
     if ($nodename eq 'base64')  {
-        return RPC::XML::base64->new(decode_base64($val));
+        return RPC::XML::base64->new(MIME::Base64::decode_base64($val));
     } elsif ($nodename eq 'struct') {
         my @members = $node->findnodes('./member'); # XXX
         my $result = {};
