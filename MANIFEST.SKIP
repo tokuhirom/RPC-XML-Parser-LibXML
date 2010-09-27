@@ -53,3 +53,5 @@
 ^[^/]+\.pl$
 ^\.shipit$
 \.sw[po]$
+^RPC-XML-Parser-LibXML-[0-9.]+/
+^README.mkdn$

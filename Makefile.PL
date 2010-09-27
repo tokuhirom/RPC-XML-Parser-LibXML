@@ -9,7 +9,7 @@ requires 'Encode';
 requires 'MIME::Base64';
 
 auto_set_repository();
-readme_markdown_from_pod 'lib/RPC/XML/Parser/LibXML.pm';
+readme_markdown_from_pod('lib/RPC/XML/Parser/LibXML.pm');
 
 author_tests('xt');
 build_requires 'Test::More';

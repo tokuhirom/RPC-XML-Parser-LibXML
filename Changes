@@ -1,5 +1,12 @@
 Revision history for Perl extension RPC::XML::Parser::LibXML
 
+0.05  Mon Sep 27 18:08:24 JST 2010
+
+        - Fixed a testing issue in dateTime.iso8601.
+          (Tokuhiro Matsuno)
+        - Depend to latest RPC::XML.
+          (Tokuhiro Matsuno)
+
 0.04  Fri Oct 24 17:59:12 PDT 2008
         - Fixed a bug where <value>foo</value> is not treated as <string> as in XMLRPC spec.
           (Benjamin Trott, Tatsuhiko Miyagawa)
