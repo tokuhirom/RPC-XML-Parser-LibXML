@@ -116,14 +116,14 @@ _is_deeply parse_rpc_xml(qq{
     <methodCall>
       <methodName>foo.bar</methodName>
       <params>
-        <param><value><dateTime.iso8601>20070501T120656+0900</dateTime.iso8601></value></param>
+        <param><value><dateTime.iso8601>20070501T12:06:56</dateTime.iso8601></value></param>
       </params>
     </methodCall>
   }), RPC::XML::request->new(
       'foo.bar',
-      RPC::XML::datetime_iso8601->new('20070501T120656+0900'),
+      RPC::XML::datetime_iso8601->new('20070501T12:06:56'),
      ),
-  'methodCall w/ [20070501T120656+0900::dateTime.iso8601]';
+  'methodCall w/ [20070501T12:06:56::dateTime.iso8601]';
 
 _is_deeply parse_rpc_xml(qq{
     <methodCall>
