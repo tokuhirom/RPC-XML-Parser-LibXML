@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 28;
+use Test::More tests => 30;
 BEGIN { use_ok('RPC::XML::Parser::LibXML') };
 
 use RPC::XML;
@@ -435,4 +435,50 @@ XML
     is $r->{args}->[3]->{title}->value, 'test';
     is $r->{args}->[3]->{description}->value, 'desc';
     is_deeply $r->{args}->[4], [ map RPC::XML::string->new($_), qw( foo bar ) ];
+}
+
+## Don't allow external entities
+{
+    my $r = eval { RPC::XML::Parser::LibXML::parse_rpc_xml(<<XML);
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE foo [
+    <!ENTITY foo SYSTEM "file:///etc/passwd">
+]>
+<methodCall>
+ <methodName>metaWeblog.newPost</methodName>
+ <params>
+  <param>
+   <value>entity:[&foo;]</value>
+  </param>
+  <param>
+   <value><string>**ACCOUNTNAME**</string></value>
+  </param>
+  <param>
+   <value><string>**PASSWORD**</string></value>
+  </param>
+  <param>
+   <value>
+    <struct>
+     <member><name>title</name><value>test</value></member>
+     <member><name>description</name><value><string>desc</string></value></member>
+    </struct>
+   </value>
+  </param>
+  <param>
+   <value>
+    <array>
+     <data>
+      <value>foo</value>
+      <value><string>$lt;</string></value>
+     </data>
+    </array>
+   </value>
+  </param>
+ </params>
+</methodCall>
+XML
+    };
+
+    ok !$@, "We didn't die...";
+    is $r->{args}->[0]->value, 'entity:[]', "...but entities were ignored";
 }
