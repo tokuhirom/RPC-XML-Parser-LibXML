@@ -1,5 +1,12 @@
 Revision history for Perl extension RPC::XML::Parser::LibXML
 
+0.06
+
+        - Don't allow external entities to be injected
+          Bump LibXML to 1.70 (because we need to specify %param to new() and
+          LibXML changed that method signature in a recent version)
+          (yannk)
+
 0.05  Mon Sep 27 18:08:24 JST 2010
 
         - Fixed a testing issue in dateTime.iso8601.
