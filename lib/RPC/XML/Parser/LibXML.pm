@@ -25,7 +25,13 @@ my $value_xpath = join "|", map "./$_", qw( int i4 boolean string double dateTim
 sub parse_rpc_xml {
     my $xml = shift;
 
-    my $x = XML::LibXML->new;
+    my $x = XML::LibXML->new({
+        no_network => 1,
+        expand_xinclude => 0,
+        expand_entities => 1,
+        load_ext_dtd => 0,
+        ext_ent_handler => sub { warn "External entities disabled."; '' },
+    });
     my $doc = $x->parse_string($xml)->documentElement;
 
     if ($doc->findnodes('/methodCall')) {
