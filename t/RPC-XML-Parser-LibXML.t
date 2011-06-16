@@ -6,6 +6,7 @@
 # change 'tests => 1' to 'tests => last_test_to_print';
 
 use Test::More tests => 30;
+use File::Spec;
 BEGIN { use_ok('RPC::XML::Parser::LibXML') };
 
 use RPC::XML;
@@ -439,10 +440,11 @@ XML
 
 ## Don't allow external entities
 {
+    my $path = File::Spec->rel2abs('t/passwd');
     my $r = eval { RPC::XML::Parser::LibXML::parse_rpc_xml(<<XML);
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE foo [
-    <!ENTITY foo SYSTEM "file:///etc/passwd">
+    <!ENTITY foo SYSTEM "file://$path">
 ]>
 <methodCall>
  <methodName>metaWeblog.newPost</methodName>
