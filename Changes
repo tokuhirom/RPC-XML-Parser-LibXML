@@ -1,5 +1,9 @@
 Revision history for Perl extension RPC::XML::Parser::LibXML
 
+0.07
+
+    - do not use /etc/passwd for testing(tokuhirom)
+
 0.06
 
         - Don't allow external entities to be injected

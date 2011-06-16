@@ -17,6 +17,7 @@ MANIFEST			This list of files
 META.yml
 README
 t/00_compile.t
+t/passwd
 t/RPC-XML-Parser-LibXML.t
 xt/97_podspell.t
 xt/98_perlcritic.t
