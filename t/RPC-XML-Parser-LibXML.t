@@ -471,7 +471,7 @@ XML
     <array>
      <data>
       <value>foo</value>
-      <value><string>$lt;</string></value>
+      <value><string>&lt;</string></value>
      </data>
     </array>
    </value>
