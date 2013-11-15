@@ -8,7 +8,7 @@ requires 'Carp';
 requires 'Encode';
 requires 'MIME::Base64';
 
-auto_set_repository();
+repository 'https://github.com/tokuhirom/RPC-XML-Parser-LibXML';
 readme_markdown_from_pod('lib/RPC/XML/Parser/LibXML.pm');
 
 author_tests('xt');
