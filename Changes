@@ -1,5 +1,11 @@
 Revision history for Perl module RPC::XML::Parser::LibXML
 
+{{$NEXT}}
+
+0.08 2013-11-20T04:56:09Z
+
+    - minil migrate
+
 0.07 2011-06-16
 
     - do not use /etc/passwd for testing(tokuhirom)
